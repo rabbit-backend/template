@@ -1,13 +1,15 @@
 package engine
 
-import "text/template"
+import (
+	"text/template"
+)
 
 type Engine struct {
 	tempalte *template.Template
 	parser   *SqlParser
 }
 
-func NewEngine() *Engine {
+func createEngine() *Engine {
 	parser := NewSqlParser()
 	tmpl := template.New("__rabbit__").Funcs(template.FuncMap{
 		"marshal":     marshal,
@@ -18,4 +20,20 @@ func NewEngine() *Engine {
 		tempalte: tmpl,
 		parser:   parser,
 	}
+}
+
+func NewEngine() *Engine {
+	engine := createEngine()
+	engine.parser.placeHolder = &PostgresPlaceholder{
+		index: 0,
+	}
+
+	return engine
+}
+
+func NewEngineWithPlaceHolder(placeHolder PlaceHolder) *Engine {
+	engine := createEngine()
+	engine.parser.placeHolder = placeHolder
+
+	return engine
 }

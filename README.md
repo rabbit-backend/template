@@ -54,6 +54,8 @@ func main() {
 		Limit:        10,
 	}
 
+	sqlEngine := engine.NewEngineWithPlaceHolder(engine.NewPostgresPlaceHolder())
+
 	query, args, err := engine.Execute("sql/query.sql.tmpl", params)
 	if err != nil {
 		log.Fatalf("Failed to generate query: %v", err)

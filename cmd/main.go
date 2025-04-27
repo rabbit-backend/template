@@ -7,7 +7,9 @@ import (
 )
 
 func main() {
-	query, args := engine.Execute(
+	sqlEngine := engine.NewEngineWithPlaceHolder(engine.NewSqlitePlaceholder())
+
+	query, args := sqlEngine.Execute(
 		"test/app.sql",
 		map[string]map[string]string{
 			"args": {"id": "123"},

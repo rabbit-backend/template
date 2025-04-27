@@ -5,8 +5,7 @@ import (
 	"os"
 )
 
-func Execute(name string, args any) (string, []any) {
-	engine := NewEngine()
+func (engine *Engine) Execute(name string, args any) (string, []any) {
 	buf := new(bytes.Buffer)
 
 	file, err := os.Open(name)
@@ -25,6 +24,8 @@ func Execute(name string, args any) (string, []any) {
 	if err := tmpl.Execute(out, args); err != nil {
 		panic(err)
 	}
+
+	engine.parser.placeHolder.Reset()
 
 	return out.String(), engine.parser.args
 }
