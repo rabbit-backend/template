@@ -25,6 +25,8 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 		panic(err)
 	}
 
+	sqlArgs := engine.parser.args
 	engine.parser.Reset()
-	return out.String(), engine.parser.args
+
+	return out.String(), sqlArgs
 }
