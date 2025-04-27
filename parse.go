@@ -25,7 +25,6 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 		panic(err)
 	}
 
-	engine.parser.placeHolder.Reset()
-
+	engine.parser.Reset()
 	return out.String(), engine.parser.args
 }
