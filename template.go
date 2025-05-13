@@ -22,6 +22,7 @@ func createEngine() *Engine {
 	return &Engine{
 		tempalte: tmpl,
 		parser:   parser,
+		cache:    make(map[string]string, 0),
 	}
 }
 
