@@ -9,6 +9,7 @@ type Engine struct {
 	tempalte *template.Template
 	parser   *SqlParser
 	lock     sync.RWMutex
+	cache    map[string]string
 }
 
 func createEngine() *Engine {

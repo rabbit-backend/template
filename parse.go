@@ -11,14 +11,20 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 
 	buf := new(bytes.Buffer)
 
-	file, err := os.Open(name)
-	if err != nil {
-		panic(err)
+	tmplStr, ok := engine.cache[name]
+	if !ok {
+		file, err := os.Open(name)
+		if err != nil {
+			panic(err)
+		}
+
+		file.WriteTo(buf)
+
+		tmplStr = buf.String()
+		engine.cache[name] = tmplStr
 	}
 
-	file.WriteTo(buf)
-
-	tmpl, err := engine.tempalte.Parse(buf.String())
+	tmpl, err := engine.tempalte.Parse(tmplStr)
 	if err != nil {
 		panic(err)
 	}
