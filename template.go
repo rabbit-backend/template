@@ -1,12 +1,14 @@
 package engine
 
 import (
+	"sync"
 	"text/template"
 )
 
 type Engine struct {
 	tempalte *template.Template
 	parser   *SqlParser
+	lock     sync.RWMutex
 }
 
 func createEngine() *Engine {

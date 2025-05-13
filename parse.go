@@ -6,6 +6,9 @@ import (
 )
 
 func (engine *Engine) Execute(name string, args any) (string, []any) {
+	engine.lock.Lock()
+	defer engine.lock.Unlock()
+
 	buf := new(bytes.Buffer)
 
 	file, err := os.Open(name)
