@@ -11,8 +11,23 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 
 	buf := new(bytes.Buffer)
 
-	tmplStr, ok := engine.cache[name]
-	if !ok {
+	var tmplStr string
+	var ok bool
+
+	if engine.isCacheEnabled {
+		tmplStr, ok = engine.cache[name]
+		if !ok {
+			file, err := os.Open(name)
+			if err != nil {
+				panic(err)
+			}
+
+			file.WriteTo(buf)
+
+			tmplStr = buf.String()
+			engine.cache[name] = tmplStr
+		}
+	} else {
 		file, err := os.Open(name)
 		if err != nil {
 			panic(err)
@@ -21,7 +36,6 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 		file.WriteTo(buf)
 
 		tmplStr = buf.String()
-		engine.cache[name] = tmplStr
 	}
 
 	tmpl, err := engine.tempalte.Parse(tmplStr)
@@ -38,4 +52,8 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 	engine.parser.Reset()
 
 	return out.String(), sqlArgs
+}
+
+func (engine *Engine) SetCache(cacheStatus bool) {
+	engine.isCacheEnabled = cacheStatus
 }

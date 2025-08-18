@@ -6,10 +6,11 @@ import (
 )
 
 type Engine struct {
-	tempalte *template.Template
-	parser   *SqlParser
-	lock     sync.RWMutex
-	cache    map[string]string
+	tempalte       *template.Template
+	parser         *SqlParser
+	lock           sync.RWMutex
+	cache          map[string]string
+	isCacheEnabled bool
 }
 
 func createEngine() *Engine {
@@ -20,9 +21,10 @@ func createEngine() *Engine {
 	})
 
 	return &Engine{
-		tempalte: tmpl,
-		parser:   parser,
-		cache:    make(map[string]string, 0),
+		tempalte:       tmpl,
+		parser:         parser,
+		cache:          make(map[string]string, 0),
+		isCacheEnabled: true,
 	}
 }
 
