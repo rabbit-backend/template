@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func (engine *Engine) Execute(name string, args any) (string, []any) {
+func (engine *Engine) Execute(name string, args any) (string, []any, error) {
 	engine.lock.Lock()
 	defer engine.lock.Unlock()
 
@@ -19,7 +19,7 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 		if !ok {
 			file, err := os.Open(name)
 			if err != nil {
-				panic(err)
+				return "", nil, err
 			}
 
 			file.WriteTo(buf)
@@ -30,7 +30,7 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 	} else {
 		file, err := os.Open(name)
 		if err != nil {
-			panic(err)
+			return "", nil, err
 		}
 
 		file.WriteTo(buf)
@@ -40,18 +40,18 @@ func (engine *Engine) Execute(name string, args any) (string, []any) {
 
 	tmpl, err := engine.tempalte.Parse(tmplStr)
 	if err != nil {
-		panic(err)
+		return "", nil, err
 	}
 
 	out := new(bytes.Buffer)
 	if err := tmpl.Execute(out, args); err != nil {
-		panic(err)
+		return "", nil, err
 	}
 
 	sqlArgs := engine.parser.args
 	engine.parser.Reset()
 
-	return out.String(), sqlArgs
+	return out.String(), sqlArgs, nil
 }
 
 func (engine *Engine) SetCache(cacheStatus bool) {
