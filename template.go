@@ -16,8 +16,9 @@ type Engine struct {
 func createEngine() *Engine {
 	parser := NewSqlParser()
 	tmpl := template.New("__rabbit__").Funcs(template.FuncMap{
-		"marshal":     marshal,
-		"__sql_arg__": parser.Parse,
+		"marshal":                 marshal,
+		"__sql_arg__":             parser.Parse,
+		"__default_placeholder__": DefaultPlaceHolder,
 	})
 
 	return &Engine{
