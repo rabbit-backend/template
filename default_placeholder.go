@@ -1,5 +1,5 @@
 package engine
 
-func DefaultPlaceHolder() string {
+func DefaultPlaceHolder(_ string) string {
 	return "?"
 }
